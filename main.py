@@ -1,5 +1,8 @@
 import pygame
 from settings import Settings
+from level import Level
+from debug import debug
+
 
 
 class Game:
@@ -13,16 +16,21 @@ class Game:
         # Set up the screen
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Electro Apocalypse")
+        # pygame.display.set_icon('')
 
+        self.level = Level()
 
     def run_game(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    return
+                    return  
 
-            self.screen.fill((0, 0, 0))
+           
+            self.screen.fill(self.settings.bg)
+            self.level.run() 
+            # debug('hello')
             pygame.display.flip()
             self.clock.tick(self.settings.fps)
 
