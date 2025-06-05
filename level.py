@@ -45,16 +45,16 @@ class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
         self.display_surface = pygame.display.get_surface()
-        self.half_width = self.display_surface.get_width()  //  2
-        self.half_height = self.display_surface.get_height() //  2
+        self.half_width = self.display_surface.get_size()[0] //  2 #unpacks the cords then gets the int
+        self.half_height = self.display_surface.get_size()[1] //  2
         self.offset = pygame.math.Vector2()
-
+        # Floor creation
     def custom_draw(self, player):
         # 1) Compute the camera offset based on player’s rect.center
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
 
         # 2) Draw each sprite in ascending order of rect.centery (Y‐sort)
-        for sprite in sorted(self.sprites(), key=lambda spr: spr.rect.centery):
+        for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)

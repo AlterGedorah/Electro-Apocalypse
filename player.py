@@ -55,15 +55,15 @@ class Player(pygame.sprite.Sprite):
                     if self.direction.y < 0:  # moving up
                         self.hitbox.top = sprite.hitbox.bottom
 
-    def move(self):
+    def move(self,speed):
         # Normalize diagonal speed
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
 
         # Move on X, collide, then move on Y, collide
-        self.hitbox.x += self.direction.x * self.speed
+        self.hitbox.x += self.direction.x * speed
         self.collision('horizontal')
-        self.hitbox.y += self.direction.y * self.speed
+        self.hitbox.y += self.direction.y * speed
         self.collision('vertical')
 
         # NOW that hitbox is final, sync rect.center BEFORE drawing
@@ -71,4 +71,4 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.input()
-        self.move()
+        self.move(self.speed)
