@@ -14,11 +14,12 @@ class Game:
         # Set up the time clock
         self.clock = pygame.time.Clock()
         # Set up the screen
+        
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Electro Apocalypse")
-        # pygame.display.set_icon('')
+        # pygame.display.set_icon('')   
 
         self.level = Level()
 
@@ -33,7 +34,9 @@ class Game:
                         pygame.quit()
                         sys.exit()
             
-            self.screen.fill(self.settings.bg)
+
+                
+            # self.screen.fill(self.settings.bg)
             self.level.run() 
             # debug('hello')
             pygame.display.flip()

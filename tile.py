@@ -1,10 +1,15 @@
 import pygame
-from settings import *
+from settings import Settings as st
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self,pos, groups):
+    def __init__(self, pos, groups, sprite_type, surface=None):
         super().__init__(groups)
-        self.wall = pygame.image.load('assets\WALL.png').convert_alpha()
-        self.rect = self.wall.get_rect(topleft = pos)
-        self.image = pygame.transform.scale(pygame.image.load('assets\WALL.png'),(32, 32))
-        self.hitbox = self.rect.inflate(0,-10)
+        self.sprite_type = sprite_type
+
+        if surface is None:
+            surface = pygame.Surface((32, 32), pygame.SRCALPHA)
+            surface.fill((0, 0, 0, 0))  # Transparent
+
+        self.image = surface
+        self.rect = self.image.get_rect(topleft=pos)
+        self.hitbox = self.rect.inflate(0, -10)

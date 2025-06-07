@@ -6,6 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
         self.image = pygame.image.load('assets/sol-export.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (32,32))
         self.rect = self.image.get_rect(topleft=pos)
 
         # Create a smaller “hitbox” inside self.rect
@@ -14,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.obstacle_sprites = obstacle_sprites
         self.direction = pygame.math.Vector2()
         self.speed = 5
+        
 
     def input(self):
         keys = pygame.key.get_pressed()
