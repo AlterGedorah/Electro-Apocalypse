@@ -34,20 +34,9 @@ class Level:
                     y = row_index * self.settings.tilesize
 
                     if style == 'boundary' and col != '-1' and col in obstacle_ids:
-                        Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'invisible')
+                        Tile((x, y), [self.obstacle_sprites], 'invisible')
 
 
-        #         if col == 1:
-        #             # Wall tile → belongs to both visible_sprites and obstacle_sprites
-        #             Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
-
-        #         if col == 'p':
-        #             # Player → belongs only to visible_sprites, but knows obstacle_sprites
-        #             self.player = Player(
-        #                 (x, y),
-        #                 [self.visible_sprites],
-        #                 self.obstacle_sprites
-        #             )
         self.player = Player(
             (100, 200),
             [self.visible_sprites],
@@ -71,7 +60,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         # original_floor = pygame.image.load("assets/map/floor.png").convert_alpha()
         # cropped_floor = original_floor.subsurface((0, 0, 512, 416))
 
-        self.zoom = 1  # zoom 
+        self.zoom = 2  # zoom 
         
         # Off-screen surface for drawing
         self.internal_surface_size = (int(self.display_surface.get_width() / self.zoom),

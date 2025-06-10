@@ -12,11 +12,16 @@ class Player(pygame.sprite.Sprite):
         # Create a smaller “hitbox” inside self.rect
         self.hitbox = self.rect.inflate(0, -10)
 
+        self.attacking = False
+        self.attack_cooldwon = 400
+        self.attack_time = None
+
         self.obstacle_sprites = obstacle_sprites
         self.direction = pygame.math.Vector2()
         self.speed = 5
         
-
+    def import_player_assets(self):
+        character_path = '../'
     def input(self):
         keys = pygame.key.get_pressed()
         # Vertical
@@ -34,6 +39,15 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 1
         else:
             self.direction.x = 0
+
+        if keys [pygame.K_SPACE] and not self.attacking:
+            self.attacking = True
+            self.attack_time = pygame.time.get_ticks()
+            
+            print('Attack')
+
+
+
 
     def collision(self, direction):
         """
@@ -71,6 +85,15 @@ class Player(pygame.sprite.Sprite):
         # NOW that hitbox is final, sync rect.center BEFORE drawing
         self.rect.center = self.hitbox.center
 
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+        if self.attacking:
+            if current_time - self.attack_time >= self.attack_cooldwon:
+                self.attacking = False
+
+
+
     def update(self):
         self.input()
+        self.cooldowns()
         self.move(self.speed)

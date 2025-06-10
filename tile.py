@@ -8,8 +8,8 @@ class Tile(pygame.sprite.Sprite):
 
         if surface is None:
             surface = pygame.Surface((32, 32), pygame.SRCALPHA)
-            surface.fill((0, 0, 0, 0))  # Transparent
+            # surface.fill((0, 0, 0, 0))  # Transparent
 
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(0, -10)
+        self.hitbox = self.rect.inflate(0, 10)
