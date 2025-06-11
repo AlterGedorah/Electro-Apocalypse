@@ -22,20 +22,23 @@ class Level:
 
     def create_map(self):
         layout = {
-            'boundary': import_csv_layout(r'assets\map\level_1_floor.csv')
+            'walls': import_csv_layout(r'assets/map/map_Walls.csv')
         }
 
-        obstacle_ids = {'0','1', '3', '5', '7', '12','15','17','19','21', '14', '24', '25', '26'}  # Add more if needed
+        self.tileset = import_cut_graphics(r'assets\map\WALL_FINAL_ASE.png', self.settings.tilesize)
+        obstacle_ids = {str(i) for i in range(27)}  # Add more if needed
 
         for style, layout_grid in layout.items():
             for row_index, row in enumerate(layout_grid):
                 for col_index, col in enumerate(row):
-                    x = col_index * self.settings.tilesize
-                    y = row_index * self.settings.tilesize
-
-                    if style == 'boundary' and col != '-1' and col in obstacle_ids:
-                        Tile((x, y), [self.obstacle_sprites], 'invisible')
-
+                    if col != '-1':
+                        x = col_index * self.settings.tilesize
+                        y = row_index * self.settings.tilesize
+                        
+                        tile_id = int(col)
+                        if style == 'walls' and col in obstacle_ids:
+                            image = self.tileset[tile_id]
+                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'wall', image)
 
         self.player = Player(
             (100, 200),
@@ -59,7 +62,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
         # original_floor = pygame.image.load("assets/map/floor.png").convert_alpha()
         # cropped_floor = original_floor.subsurface((0, 0, 512, 416))
-
+        
         self.zoom = 2  # zoom 
         
         # Off-screen surface for drawing
@@ -68,7 +71,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.internal_surface = pygame.Surface(self.internal_surface_size)
         self.internal_rect = self.internal_surface.get_rect(center=(self.half_width, self.half_height))
 
-        self.floor_surf = pygame.image.load(r"assets\map\floor.png").convert()
+        self.floor_surf = pygame.image.load(r"assets\map\mao.png").convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):
