@@ -10,20 +10,20 @@ class Player(pygame.sprite.Sprite):
 
         # Load animations AFTER display is initialized
         self.animations = {
-            'idle': import_cut_graphics(r'C:\Users\LENOVO\Desktop\Projects\Python\Electro Apocalypse\assets\Soldier\Soldier\Soldier-Idle.png', tile_size=100),
-            'walk': import_cut_graphics(r'C:\Users\LENOVO\Desktop\Projects\Python\Electro Apocalypse\assets\Soldier\Soldier\Soldier-Walk.png', tile_size=100),
-            'attack': import_cut_graphics(r'C:\Users\LENOVO\Desktop\Projects\Python\Electro Apocalypse\assets\Soldier\Soldier\Soldier-Attack01.png', tile_size=100),
-            'hurt': import_cut_graphics(r'C:\Users\LENOVO\Desktop\Projects\Python\Electro Apocalypse\assets\Soldier\Soldier\Soldier-Hurt.png', tile_size=100)
+            'idle': import_cut_graphics(r'assets/Soldier/Soldier/Soldier-Idle.png', tile_size=200),
+            'walk': import_cut_graphics(r'assets/Soldier/Soldier/Soldier-Walk.png', tile_size=200),
+            'attack': import_cut_graphics(r'assets/Soldier/Soldier/Soldier-Attack01.png', tile_size=200),
+            'hurt': import_cut_graphics(r'assets/Soldier/Soldier/Soldier-Hurt.png', tile_size=200)
         }
 
         self.state = 'idle'
         self.facing_left = False
         self.frame_index = 0
-        self.animation_speed = 0.1
+        self.animation_speed = 0.2
 
         self.image = self.animations[self.state][self.frame_index]
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(0, -10)
+        self.hitbox = self.rect.inflate(0, -5)
 
         # Movement
         self.direction = pygame.math.Vector2()
@@ -69,7 +69,7 @@ class Player(pygame.sprite.Sprite):
             self.state = 'attack'
         elif self.hurt:
             self.state = 'hurt'
-        elif self.direction.x != 0:
+        elif self.direction.magnitude() != 0:
             self.state = 'walk'
         else:
             self.state = 'idle'

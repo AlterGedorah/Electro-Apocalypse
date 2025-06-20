@@ -13,7 +13,7 @@ class Game:
         self.settings = Settings()
         # Set up the time clock
         self.clock = pygame.time.Clock()
-        # Set up the screen
+        # Set up the screen 
         
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
