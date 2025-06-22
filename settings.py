@@ -5,3 +5,9 @@ class Settings:
         self.fps = 60
         self.bg = ('white')
         self.tilesize = 32
+
+
+#BULLET SETTINGS
+shoot_cooldown = 20
+bullet_scale = 1.4
+bullet_speed = 10

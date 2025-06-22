@@ -2,6 +2,7 @@
 import pygame
 from settings import *
 from support import import_cut_graphics, get_frame
+import math
 
 
 class Player(pygame.sprite.Sprite):
@@ -35,6 +36,8 @@ class Player(pygame.sprite.Sprite):
         self.attack_cooldown = 400
         self.attack_time = None
         self.hurt = False  # Make sure this is defined
+        self.shoot = False
+        self.shoot_cooldown = 0
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -73,6 +76,24 @@ class Player(pygame.sprite.Sprite):
             self.state = 'walk'
         else:
             self.state = 'idle'
+
+        if pygame.mouse.get_pressed() == (1, 0, 0) or keys[pygame.K_SPACE]:
+            self.shoot = True
+            self.is_shooting()
+        else:
+            self.shoot = False
+
+    def is_shooting(self):
+        if self.shoot_cooldown == 0:
+            self.shoot_cooldown = shoot_cooldown
+            spawn_bullet_pos = self.direction
+            self.bullet = Bullet(spawn_bullet_pos[0, spawn_bullet_pos[1]], self.angle)
+            bullet_group.add(self.bullet)
+            all_sprites_group.add(self.bullet)
+            
+            
+
+
     def animate(self):
         frames = self.animations[self.state]
         self.frame_index += self.animation_speed
@@ -123,3 +144,45 @@ class Player(pygame.sprite.Sprite):
         self.input()
         self.cooldowns()
         self.move(self.speed)
+
+        if self.shoot_cooldown > 0:
+            self.shoot_cooldown -= 1
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y, angle):
+        super().__init__()
+        self.image = pygame.image.load("assets/gun/bullet.bmp").convert_alpha()
+        self.image = pygame.transform.rotozoom(self.image, 0, bullet_scale)
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.x = x
+        self.y = y
+        self.angle = angle
+        self.speed = bullet_speed
+        self.x_vel = math.cos(self.angle * (2*math.pi/ 360)) * self.speed
+        self.y_vel = math.sin(self.angle * (2*math.pi/ 360)) * self.speed
+
+
+    def bullet_movement(self):
+        self.x += self.x_vel
+        self.y += self.y_vel
+        
+        self.rect.x = int(self.x)
+        self.rect.y = int(self.y)
+
+    def update(self):
+        self.bullet_movement()
+        
+all_sprites = pygame.sprite.Group()
+bullet_group = pygame.sprite.Group()
+
+all_sprites_group.add(player)
+
+while True:
+    keys = pygame.key.get_pressed()
+    for event in pygame.event.get():    
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+    
+    all_sprites_group.update()
