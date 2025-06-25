@@ -23,6 +23,43 @@ class Game:
         dt = self.clock.tick(60) / 1000  
         
         self.level = Level()
+        self.game_over = False
+
+    def show_game_over(self):
+        # Load and draw the background image
+        bg = pygame.image.load('assets/images/game_over.png').convert()
+        bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
+        self.screen.blit(bg, (0, 0))
+
+        # Optionally, overlay a semi-transparent black rectangle for effect
+        overlay = pygame.Surface((self.settings.screen_width, self.settings.screen_height))
+        overlay.set_alpha(128)
+        overlay.fill((0, 0, 0))
+        self.screen.blit(overlay, (0, 0))
+
+        # Draw the "GAME OVER" text
+        font = pygame.font.Font(None, 100)
+        text = font.render("GAME OVER", True, (255, 0, 0))
+        self.screen.blit(
+            text,
+            (
+                self.settings.screen_width // 2 - text.get_width() // 2,
+                self.settings.screen_height // 2 - text.get_height() // 2 - 50,
+            ),
+        )
+
+        # Draw the instructions text
+        small_font = pygame.font.Font(None, 50)
+        instr = small_font.render("Press R to Restart or Q to Quit", True, (255, 255, 255))
+        self.screen.blit(
+            instr,
+            (
+                self.settings.screen_width // 2 - instr.get_width() // 2,
+                self.settings.screen_height // 2 + text.get_height() // 2,
+            ),
+        )
+
+        pygame.display.flip()
 
     def run_game(self): 
         while True:
@@ -35,10 +72,19 @@ class Game:
                     if event.key == pygame.K_q:
                         pygame.quit()
                         sys.exit()
-            
+                    if self.game_over and event.key == pygame.K_r:
+                        # Restart the game (reload level, reset player, etc.)
+                        self.level = Level()
+                        self.game_over = False
 
-                
-            # self.screen.fill(self.settings.bg)
+            # Check for game over
+            if self.level.player.health <= 0:
+                self.game_over = True
+
+            if self.game_over:
+                self.show_game_over()
+                continue
+
             self.level.run() 
             # debug('hello')
             pygame.display.flip()   

@@ -60,7 +60,8 @@ class Player(Entity):
         return base_damage
 
     def load_images(self):
-        self.bullet_surf = pygame.image.load(r'assets\weapons\energy_ball.png').convert_alpha()
+        bullet = pygame.image.load(r'assets\weapons\energy_ball.png').convert_alpha()
+        self.bullet_surf = pygame.transform.smoothscale(bullet, (64, 64))  # Adjust size as needed
 
 
     def gun_timer(self):

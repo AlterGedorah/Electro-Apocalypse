@@ -13,6 +13,7 @@ class Magic(pygame.sprite.Sprite):
         self.screen = pygame.display.get_surface()
         #sprite setup
         self.wand_surf = pygame.image.load(r'assets\weapons\staff.png').convert_alpha()
+        self.wand_surf = pygame.transform.smoothscale(self.wand_surf, (18, 42))  # Adjust size as needed
         self.image = self.wand_surf
         self.rect = self.image.get_frect(center=player.rect.center + self.direction * self.distance)
         
