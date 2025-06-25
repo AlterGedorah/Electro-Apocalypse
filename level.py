@@ -22,11 +22,11 @@ class Level:
 
     def create_map(self):
         layout = {
-            'walls': import_csv_layout(r'assets/map/map_Walls.csv')
+            'walls': import_csv_layout(r'assets\map\csv\TILES FOR GAME_WALLS_Walls.csv')
         }
 
-        self.tileset = import_cut_graphics(r'assets\map\WALL_FINAL_ASE.png', self.settings.tilesize)
-        obstacle_ids = {str(i) for i in range(27)}  # Add more if needed
+        self.tileset = import_cut_graphics(r'assets\map\pictures\tileset.png', self.settings.tilesize)
+        obstacle_ids = {str(i) for i in range(200)}  # Add more if needed
 
         for style, layout_grid in layout.items():
             for row_index, row in enumerate(layout_grid):
@@ -60,38 +60,29 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
-        # original_floor = pygame.image.load("assets/map/floor.png").convert_alpha()
-        # cropped_floor = original_floor.subsurface((0, 0, 512, 416))
-        
-        self.zoom = 2  # zoom 
-        
-        # Off-screen surface for drawing
-        self.internal_surface_size = (int(self.display_surface.get_width() / self.zoom),
-                                      int(self.display_surface.get_height() / self.zoom))
-        self.internal_surface = pygame.Surface(self.internal_surface_size)
-        self.internal_rect = self.internal_surface.get_rect(center=(self.half_width, self.half_height))
 
-        self.floor_surf = pygame.image.load(r"assets\map\mao.png").convert()
+
+        self.floor_surf = pygame.image.load(r"assets\map\pictures\floor.png").convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):
-        self.offset.x = player.rect.centerx - self.internal_surface.get_width() // 2
-        self.offset.y = player.rect.centery - self.internal_surface.get_height() // 2
+        self.offset.x = player.rect.centerx - self.display_surface.get_width() // 2
+        self.offset.y = player.rect.centery - self.display_surface.get_height() // 2
 
         # Clear the internal surface
-        self.internal_surface.fill((0, 0, 0))
+        self.display_surface.fill((0, 0, 0))
 
         # debug(player.rect.center)  # use the passed argument!
         # Draw floor
         floor_offset_pos = self.floor_rect.topleft - self.offset
-        self.internal_surface.blit(self.floor_surf, floor_offset_pos)
+        self.display_surface.blit(self.floor_surf, floor_offset_pos)
 
         # Draw sprites
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
-            self.internal_surface.blit(sprite.image, offset_pos)
+            self.display_surface.blit(sprite.image, offset_pos)
 
         # Scale and blit to the main display surface
-        scaled_surface = pygame.transform.scale(self.internal_surface, self.display_surface.get_size())
+        scaled_surface = pygame.transform.scale(self.display_surface, self.display_surface.get_size())
         self.display_surface.blit(scaled_surface, (0, 0))
        
