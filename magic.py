@@ -14,13 +14,16 @@ class Magic(pygame.sprite.Sprite):
         #sprite setup
         self.wand_surf = pygame.image.load(r'assets\weapons\staff.png').convert_alpha()
         self.image = self.wand_surf
-        self.rect = self.image.get_frect(center=player.rect.center + self.direction * self.distance)
+        self.rect = self.image.get_rect(center=player.rect.center + self.direction * self.distance)
         
     def get_direction(self):
         mouse_pos = pygame.Vector2(pygame.mouse.get_pos())
         player_pos = pygame.Vector2(self.screen.get_width() // 2, self.screen.get_height() // 2)
-        self.player_direction = (mouse_pos - player_pos).normalize()
-    
+        direction = mouse_pos - player_pos
+        if direction.length() != 0:
+            self.player_direction = direction.normalize()
+        else:
+            self.player_direction = pygame.Vector2(0, -1)
 
     def rotate_wand(self):
         angle = degrees(atan2(-self.player_direction.y, self.player_direction.x)) - 90  # Invert y-axis for correct rotation
@@ -39,7 +42,7 @@ class MagicMissile(pygame.sprite.Sprite):
     def __init__(self, surf, pos, direction, groups):
         super().__init__(groups)
         self.image = surf
-        self.rect = self.image.get_frect(center=pos)
+        self.rect = self.image.get_rect(center=pos)
         self.spawn_time = pygame.time.get_ticks()
         self.life_time = 1000
 
