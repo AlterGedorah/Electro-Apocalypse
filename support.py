@@ -1,5 +1,20 @@
 import pygame
 from csv import reader
+import os
+
+import os
+
+import os
+import pygame
+
+def import_folder(path):
+    surface_list = []
+    for filename in sorted(os.listdir(path)):
+        if filename.endswith('.png'):
+            full_path = os.path.join(path, filename)
+            image = pygame.image.load(full_path).convert_alpha()
+            surface_list.append(image)
+    return surface_list
 
 def import_cut_graphics(path, tile_size):
     surface = pygame.image.load(path).convert_alpha()

@@ -10,11 +10,10 @@ class Settings:
             'slime': {
                 'health': 100,
                 'exp': 50,
-                'speed': 100,
+                'speed': 5,
                 'attack_damage': 10,
                 'attack_type': 'bash',
                 'attack_sound': '../assets/sounds/slime.mp3',
-                'speed': 10,
                 'resistance': 0.1,
                 'attack_radius': 50,
                 'notice_radius': 200,

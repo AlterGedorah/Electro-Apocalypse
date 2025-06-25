@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         pygame.init()
 
-        # Initialize settings
+        # Initialize settings   
         self.settings = Settings()
         # Set up the time clock
         self.clock = pygame.time.Clock()
@@ -41,7 +41,7 @@ class Game:
             # self.screen.fill(self.settings.bg)
             self.level.run() 
             # debug('hello')
-            pygame.display.flip()
+            pygame.display.flip()   
             self.clock.tick(self.settings.fps)
 
 

@@ -38,6 +38,7 @@ class Magic(pygame.sprite.Sprite):
 class MagicMissile(pygame.sprite.Sprite):
     def __init__(self, surf, pos, direction, groups):
         super().__init__(groups)
+        self.sprite_type = 'magic_missile'
         self.image = surf
         self.rect = self.image.get_frect(center=pos)
         self.spawn_time = pygame.time.get_ticks()

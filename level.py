@@ -6,7 +6,7 @@ from player import Player
 from support import *
 from debug import *
 from ui import UI
-
+from enemy import Enemy
 class Level:
     def __init__(self):
         self.settings = Settings()
@@ -17,14 +17,15 @@ class Level:
         #  - obstacle_sprites: for collision checks only (no camera needed)
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
-
+        self.attack_sprites = pygame.sprite.Group()
+        self.attackable_sprites = pygame.sprite.Group()
         self.create_map()
 
     def create_map(self):
         layout = {
             'walls': import_csv_layout(r'assets\map\csv\TILES FOR GAME_WALLS_Walls.csv'),
             'spawn': import_csv_layout(r'assets\map\csv\TILES FOR GAME_UPDATED_Spawn.csv'),
-            # 'entities': import_csv_layout(r'assets\map\csv\TILES FOR GAME_ENTITIES_Entities.csv'),
+            'entities': import_csv_layout(r'assets\map\csv\TILES FOR GAME_UPDATED_Entities.csv'),
         }
 
         self.tileset = import_cut_graphics(r'assets\map\pictures\tileset.png', self.settings.tilesize)
@@ -45,11 +46,34 @@ class Level:
                             if col == '0':  # Assuming '0' is the spawn point
                                 self.player = Player(
                                     (x, y),
-                                    [self.visible_sprites],
+                                    {'main': self.visible_sprites, 'attack': self.attack_sprites},
                                     self.obstacle_sprites
                                 )
+                        if style == 'entities':
+                            if col == '0':
+                                Enemy('slime', 
+                                      (x, y), 
+                                      [self.visible_sprites,self.attackable_sprites],
+                                      self.obstacle_sprites,
+                                      self.damage_player,
+                                      )
+
+    def damage_player(self, amount, attack_type):
+        if self.player.vulnerable:
+            self.player.health -= amount
+            self.player.vulnerable = False
+            self.player.hurt_time = pygame.time.get_ticks()
+        
+    def player_attack_logic(self):
+        if self.attack_sprites:
+            for attack_sprite in self.attack_sprites:
+                    collision_sprite = pygame.sprite.spritecollide(attack_sprite, self.attackable_sprites, False)
+                    if collision_sprite:
+                        for target_sprite in collision_sprite:
+                            target_sprite.get_damage(attack_sprite.sprite_type, self.player)
 
 
+                            
 
         
     
@@ -58,16 +82,16 @@ class Level:
         # Update
         camera_offset = self.visible_sprites.get_offset(self.player)
         self.visible_sprites.update()
-
+        self.visible_sprites.enemy_update(self.player) 
+        self.player_attack_logic()
         # Draw all normal sprites
         self.visible_sprites.custom_draw(self.player)
         self.ui.display(self.player)
-
+        debug(self.player.status)
         # Draw weapon manually with offset
         for weapon in self.player.weapon_group:
             offset_pos = weapon.rect.topleft - camera_offset
             self.display_surface.blit(weapon.image, offset_pos)
-
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
@@ -106,4 +130,8 @@ class YSortCameraGroup(pygame.sprite.Group):
         # Scale and blit to the main display surface
         scaled_surface = pygame.transform.scale(self.display_surface, self.display_surface.get_size())
         self.display_surface.blit(scaled_surface, (0, 0))
-       
+
+    def enemy_update(self,player):
+        enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
+        for enemy in enemy_sprites:
+            enemy.enemy_update(player)
