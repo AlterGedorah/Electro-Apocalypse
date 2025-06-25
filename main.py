@@ -2,7 +2,7 @@ import pygame , sys
 from settings import Settings
 from level import Level
 from debug import debug
-
+from ui import UI
 
 
 class Game:
@@ -21,7 +21,7 @@ class Game:
         pygame.display.set_caption("Electro Apocalypse")
         # pygame.display.set_icon('') 
         dt = self.clock.tick(60) / 1000  
-
+        
         self.level = Level()
 
     def run_game(self): 

@@ -41,6 +41,13 @@ class Player(pygame.sprite.Sprite):
         self.shoot_time = 0
         self.shoot_cooldown = 100  # milliseconds
 
+
+        # Stats for player
+        self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'speed':5}
+        self.health = self.stats['health'] * 0.5
+        self.energy = self.stats['energy'] * 0.8
+        self.speed = self.stats['speed']
+        
         self.load_images()
 
     def load_images(self):

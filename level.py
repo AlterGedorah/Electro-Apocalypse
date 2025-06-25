@@ -5,13 +5,13 @@ from tile import Tile
 from player import Player
 from support import *
 from debug import *
-
+from ui import UI
 
 class Level:
     def __init__(self):
         self.settings = Settings()
         self.display_surface = pygame.display.get_surface()
-
+        self.ui = UI()
         # Two sprite groups:
         #  - visible_sprites: for drawing (with YSortCameraGroup)
         #  - obstacle_sprites: for collision checks only (no camera needed)
@@ -22,7 +22,9 @@ class Level:
 
     def create_map(self):
         layout = {
-            'walls': import_csv_layout(r'assets\map\csv\TILES FOR GAME_WALLS_Walls.csv')
+            'walls': import_csv_layout(r'assets\map\csv\TILES FOR GAME_WALLS_Walls.csv'),
+            'spawn': import_csv_layout(r'assets\map\csv\TILES FOR GAME_UPDATED_Spawn.csv'),
+            # 'entities': import_csv_layout(r'assets\map\csv\TILES FOR GAME_ENTITIES_Entities.csv'),
         }
 
         self.tileset = import_cut_graphics(r'assets\map\pictures\tileset.png', self.settings.tilesize)
@@ -39,13 +41,18 @@ class Level:
                         if style == 'walls' and col in obstacle_ids:
                             image = self.tileset[tile_id]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'wall', image)
+                        if style == 'spawn':
+                            if col == '0':  # Assuming '0' is the spawn point
+                                self.player = Player(
+                                    (x, y),
+                                    [self.visible_sprites],
+                                    self.obstacle_sprites
+                                )
 
-        self.player = Player(
-            (100, 200),
-            [self.visible_sprites],
-            self.obstacle_sprites
-        )
 
+
+        
+    
 
     def run(self):
         # Update
@@ -54,6 +61,7 @@ class Level:
 
         # Draw all normal sprites
         self.visible_sprites.custom_draw(self.player)
+        self.ui.display(self.player)
 
         # Draw weapon manually with offset
         for weapon in self.player.weapon_group:
