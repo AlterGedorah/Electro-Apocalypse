@@ -48,9 +48,17 @@ class Level:
 
 
     def run(self):
-        # Update & draw everything in visible_sprites
+        # Update
+        camera_offset = self.visible_sprites.get_offset(self.player)
         self.visible_sprites.update()
+
+        # Draw all normal sprites
         self.visible_sprites.custom_draw(self.player)
+
+        # Draw weapon manually with offset
+        for weapon in self.player.weapon_group:
+            offset_pos = weapon.rect.topleft - camera_offset
+            self.display_surface.blit(weapon.image, offset_pos)
 
 
 class YSortCameraGroup(pygame.sprite.Group):
@@ -64,6 +72,11 @@ class YSortCameraGroup(pygame.sprite.Group):
 
         self.floor_surf = pygame.image.load(r"assets\map\pictures\floor.png").convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
+
+    def get_offset(self, player):
+        self.offset.x = player.rect.centerx - self.display_surface.get_width() // 2
+        self.offset.y = player.rect.centery - self.display_surface.get_height() // 2
+        return self.offset
 
     def custom_draw(self, player):
         self.offset.x = player.rect.centerx - self.display_surface.get_width() // 2

@@ -19,12 +19,14 @@ class Game:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Electro Apocalypse")
-        # pygame.display.set_icon('')   
+        # pygame.display.set_icon('') 
+        dt = self.clock.tick(60) / 1000  
 
         self.level = Level()
 
-    def run_game(self):
+    def run_game(self): 
         while True:
+            dt = self.clock.tick(60) / 1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -44,5 +46,5 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game()
+    game = Game()   
     game.run_game()
