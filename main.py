@@ -16,7 +16,9 @@ class Game:
         self.play_background_music()
 
         # Game over sound
-        self.game_over_sound = pygame.mixer.Sound("sounds/8-bit-game-over-sound-effect-331435.mp3")
+        if not hasattr(Game, 'game_over_sound'):
+            Game.game_over_sound = pygame.mixer.Sound("sounds/8-bit-game-over-sound-effect-331435.mp3")
+        self.game_over_sound = Game.game_over_sound
         self.game_over_played = False
 
         # Initialize settings
@@ -27,20 +29,23 @@ class Game:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
-        pygame.display.set_caption("Electro Apocalypse")
+        pygame.display.set_caption("Lost Wizard")
 
         # Level
         self.level = Level()
         self.game_over = False
 
         # Fonts/UI
-        font = pygame.font.Font(None, 80)
-        self.title = font.render("Lost Wizard", True, (255, 255, 255))
-        self.start_text = font.render("Press ENTER to Start", True, (200, 200, 200))
-        self.quit_text = font.render("Press Q to Quit", True, (200, 200, 200))
-
+        self.font = pygame.font.Font(None, 80)
+        self.title = self.font.render("Lost Wizard", True, (255, 255, 255))
+        self.start_text = self.font.render("Press ENTER to Start", True, (200, 200, 200))
     def play_background_music(self):
-        pygame.mixer.music.load("sounds/exploration-chiptune-rpg-adventure-theme-336428.mp3")
+        music_path = "sounds/exploration-chiptune-rpg-adventure-theme-336428.mp3"
+        if not hasattr(self, '_current_music') or self._current_music != music_path:
+            pygame.mixer.music.load(music_path)
+            self._current_music = music_path
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play(-1)
 
@@ -98,7 +103,6 @@ class Game:
                         self.game_over = False
                         self.game_over_played = False
                         self.play_background_music()
-                        self.main_menu()
 
             # Game over check
             if self.level.player.health <= 0:
@@ -113,10 +117,12 @@ class Game:
                 self.show_game_over()
                 continue
 
-            # Game loop drawing
-            bg = pygame.image.load(r'assets\images\game_over.png').convert()
-            bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
-            self.screen.blit(bg, (0, 0))
+            # Game loop drawing (optimized background loading)
+            if not hasattr(self, '_cached_bg') or self._cached_bg is None:
+                bg = pygame.image.load('assets/images/game_over.png').convert()
+                bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
+                self._cached_bg = bg
+            self.screen.blit(self._cached_bg, (0, 0))
             self.level.run(dt)  # Pass dt here
             pygame.display.flip()
 
