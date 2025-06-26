@@ -8,6 +8,18 @@ from ui import UI
 class Game:
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
+        #backgriund music
+        pygame.mixer.init()
+        pygame.mixer.music.load("sounds\exploration-chiptune-rpg-adventure-theme-336428.mp3")  # path to your file
+        pygame.mixer.music.set_volume(0.5)  # optional: set volume (0.0 to 1.0)
+        pygame.mixer.music.play(-1)  # loop forever
+        #sounds
+        pygame.mixer.init()
+
+        walk_sound = pygame.mixer.Sound("sounds/walk.wav")
+        shoot_sound = pygame.mixer.Sound("sounds/shoot.wav")
+        
 
         # Initialize settings   
         self.settings = Settings()
