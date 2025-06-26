@@ -16,7 +16,7 @@ class Settings:
                 'attack_sound': '../assets/sounds/slime.mp3',
                 'resistance': 0.1,
                 'attack_radius': 50,
-                'notice_radius': 200,
+                'notice_radius': 500,
         }
         }
 
