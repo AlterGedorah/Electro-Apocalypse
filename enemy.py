@@ -5,6 +5,12 @@ from support import *
 
 class Enemy(Entity):
     def __init__(self, monster_name,pos,groups,obstacle_sprites,damage_player):
+
+        self.death_sound = pygame.mixer.Sound("sounds\slime-impact-352473.mp3")
+        self.death_sound.set_volume(0.9)  # optional: softer volume
+    
+        self.walk_sound = pygame.mixer.Sound("sounds\slime.walk.mp3") 
+        self.walk_sound.set_volume(0.5)  # optional: softer volume
         # general setup
         super().__init__(groups)
         self.sprite_type = 'enemy'
@@ -116,6 +122,7 @@ class Enemy(Entity):
 
     def check_death(self):
         if self.health <= 0:
+            self.death_sound.play()
             self.kill()
     
     def hit_reaction(self):
@@ -137,6 +144,11 @@ class Enemy(Entity):
         self.hit_reaction()
         self.move(self.speed)
         self.animate()
+        if self.direction.x != 0 or self.direction.y != 0:
+            if not self.walk_sound.get_num_channels():
+                self.walk_sound.play(-1)  # loop the walking sound
+        else:
+            self.walk_sound.stop()
         self.cooldowns()
         self.check_death()
 

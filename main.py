@@ -10,16 +10,20 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        #backgriund music
-        pygame.mixer.init()
-        pygame.mixer.music.load("sounds\exploration-chiptune-rpg-adventure-theme-336428.mp3")  # path to your file
-        pygame.mixer.music.set_volume(0.5)  # optional: set volume (0.0 to 1.0)
-        pygame.mixer.music.play(-1)  # loop forever
-        #sounds
-        pygame.mixer.init()
+        pygame.mixer.set_num_channels(32)  # set more channels at the start
 
-        walk_sound = pygame.mixer.Sound("sounds/walk.wav")
-        shoot_sound = pygame.mixer.Sound("sounds/shoot.wav")
+        #backgriund music
+        self.bg_sound = pygame.mixer.music.load("sounds\exploration-chiptune-rpg-adventure-theme-336428.mp3")  # path to your file
+        self.bg_sound = pygame.mixer.music.set_volume(0.3)  # optional: set volume (0.0 to 1.0)
+        self.bg_sound = pygame.mixer.music.play(-1)  # loop forever
+
+        #game_over
+        self.game_over_sound = pygame.mixer.Sound("sounds\8-bit-game-over-sound-effect-331435.mp3")
+        self.game_over_played = False
+        #sounds
+   
+
+    
         
 
         # Initialize settings
@@ -103,8 +107,14 @@ class Game:
 
             # Check for game over
             if self.level.player.health <= 0:
-                self.game_over = True
+                if not self.game_over_played:
+                    pygame.mixer.music.stop()     # 🛑 Stop background music
+                    pygame.mixer.stop()           # 🛑 Stop all sound effects
+                    self.game_over_sound.play()   # ✅ Play game over sound
+                    self.game_over_played = True
+                self.game_over = True             # Always set this flag
 
+        
             if self.game_over:
                 self.show_game_over()
                 continue
