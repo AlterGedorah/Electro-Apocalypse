@@ -23,6 +23,11 @@ class Player(Entity):
         # Combat
         self.hurt = False  # still included if needed
 
+        #shoot_sound
+        self.shoot_sound = pygame.mixer.Sound('sounds/shoot.wav')
+        #WALK
+        self.walk_sound = pygame.mixer.Sound(r'sounds\walk.wav')
+
         # gun timer
         self.can_shoot = True
         self.shoot_time = 0
@@ -97,8 +102,17 @@ class Player(Entity):
             self.direction.y = 1
             self.status = 'right'
 
+                # ✅ Play walking sound only if moving
+        if self.direction.x != 0 or self.direction.y != 0:
+            if not self.walk_sound.get_num_channels():
+                self.walk_sound.play(-1)
+        else:
+            self.walk_sound.stop()
+
+
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
             print("shoot")
+            self.shoot_sound.play()
             # Calculate the wand tip offset (adjust values as needed)
             # wand_offset = pygame.math.Vector2(40, -30) if not self.facing_left else pygame.math.Vector2(-40, -30)
             # pos = pygame.math.Vector2(self.rect.center) + wand_offset
