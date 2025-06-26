@@ -4,13 +4,12 @@ from entity import Entity
 from support import *
 
 class Enemy(Entity):
-    def __init__(self, monster_name,pos,groups,obstacle_sprites,damage_player):
-
-        self.death_sound = pygame.mixer.Sound("sounds\slime-impact-352473.mp3")
-        self.death_sound.set_volume(0.9)  # optional: softer volume
+    def __init__(self, monster_name, pos, groups, obstacle_sprites, damage_player):
+        self.death_sound = pygame.mixer.Sound(r"sounds\slime-impact-352473.mp3")  # Fix path
+        self.death_sound.set_volume(0.9)
     
-        self.walk_sound = pygame.mixer.Sound("sounds\slime.walk.mp3") 
-        self.walk_sound.set_volume(0.5)  # optional: softer volume
+        self.walk_sound = pygame.mixer.Sound(r"sounds\slime.walk.mp3")  # Fix path
+        self.walk_sound.set_volume(0.5)
         # general setup
         super().__init__(groups)
         self.sprite_type = 'enemy'
@@ -48,7 +47,9 @@ class Enemy(Entity):
         self.invincibility_duration = 300  # milliseconds
         self.damage_player = damage_player
 
-
+        # Add this line for dt movement
+        self.pos = pygame.Vector2(pos)
+        
 
 
 
@@ -141,9 +142,9 @@ class Enemy(Entity):
                 self.vulnerable = True
                 
 
-    def update(self):
+    def update(self, dt):  # Add dt parameter
         self.hit_reaction()
-        self.move(self.speed)
+        self.move(self.speed * dt)  # Multiply speed by dt
         self.animate()
         if self.direction.x != 0 or self.direction.y != 0:
             if not self.walk_sound.get_num_channels():
@@ -153,6 +154,7 @@ class Enemy(Entity):
         self.cooldowns()
         self.check_death()
 
-    def enemy_update(self, player):
+    def enemy_update(self, player, dt):  # Add dt parameter
         self.get_status(player)
-        self.actions(player) 
+        self.actions(player)
+        self.update(dt)  # Pass dt to update

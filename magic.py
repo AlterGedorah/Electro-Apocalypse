@@ -31,7 +31,7 @@ class Magic(pygame.sprite.Sprite):
         self.image = pygame.transform.rotozoom(self.wand_surf, angle, 1)
 
 
-    def update(self):
+    def update(self, dt):  # Add dt parameter
         self.get_direction()
         self.rotate_wand()
         # Reposition the wand based on direction toward mouse
@@ -48,20 +48,20 @@ class MagicMissile(pygame.sprite.Sprite):
         self.spawn_time = pygame.time.get_ticks()
         self.pos = pygame.Vector2(pos)
         self.direction = direction.normalize()
-        self.speed = 1000
+        self.speed = 800  # Pixels per second
         self.obstacle_sprites = obstacle_sprites
-        self.life_time = 1000  # milliseconds, adjust as needed
+        self.life_time = 2000  # 2 seconds
 
-    def update(self):
-        self.pos += self.direction * self.speed / 60
+    def update(self, dt):  # Add dt parameter
+        self.pos += self.direction * self.speed * dt  # Use dt for movement
         self.rect.center = self.pos
 
-        # Adjusted collision box (optional visual tweak)
-        hitbox = self.rect.inflate(-self.rect.width * 0.4, -self.rect.height * 0.4)
-
+        # Check for lifetime expiration
         if pygame.time.get_ticks() - self.spawn_time >= self.life_time:
             self.kill()
 
+        # Check for collisions
+        hitbox = self.rect.inflate(-self.rect.width * 0.4, -self.rect.height * 0.4)
         for obstacle in self.obstacle_sprites:
             if hitbox.colliderect(obstacle.rect):
                 self.kill()

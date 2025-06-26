@@ -10,7 +10,7 @@ class Settings:
             'slime': {
                 'health': 100,
                 'exp': 50,
-                'speed': 5,
+                'speed': 150,  # Changed from 5 to 150 pixels per second
                 'attack_damage': 10,
                 'attack_type': 'bash',
                 'attack_sound': '../assets/sounds/slime.mp3',

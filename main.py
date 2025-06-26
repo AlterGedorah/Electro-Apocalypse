@@ -97,7 +97,7 @@ class Game:
                         self.level = Level()
                         self.game_over = False
                         self.game_over_played = False
-                        self.play_background_music()  # ✅ restart bg music
+                        self.play_background_music()
                         self.main_menu()
 
             # Game over check
@@ -114,10 +114,10 @@ class Game:
                 continue
 
             # Game loop drawing
-            bg = pygame.image.load('assets/images/game_over.png').convert()
+            bg = pygame.image.load(r'assets\images\game_over.png').convert()
             bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
             self.screen.blit(bg, (0, 0))
-            self.level.run()
+            self.level.run(dt)  # Pass dt here
             pygame.display.flip()
 
     def main_menu(self):

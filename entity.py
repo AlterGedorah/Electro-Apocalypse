@@ -1,11 +1,13 @@
 import pygame
 from math import sin, cos, radians
+
 class Entity(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
         self.frame_index = 0
         self.animation_speed = 0.2
-    def move(self, speed):
+        
+    def move(self, speed):  # speed already includes dt from caller
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
 

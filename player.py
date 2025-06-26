@@ -36,10 +36,15 @@ class Player(Entity):
         self.status = 'idle'
 
         # Stats for player
-        self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'speed':10}
+        self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'speed': 200}
         self.health = self.stats['health'] 
         self.energy = self.stats['energy']
+        self.max_energy = self.stats['energy']  # Store max energy for regeneration
         self.speed = self.stats['speed']
+        
+        # Energy system
+        self.energy_regen_rate = 20  # Energy per second
+        self.shoot_energy_cost = 10  # Energy cost per shot
         
         self.vulnerable = True
         self.hurt_time = None
@@ -110,18 +115,28 @@ class Player(Entity):
             self.walk_sound.stop()
 
 
-        if pygame.mouse.get_pressed()[0] and self.can_shoot:
+        # Handle shooting - CHECK ENERGY FIRST
+        if pygame.mouse.get_pressed()[0] and self.can_shoot and self.energy >= self.shoot_energy_cost:
             print("shoot")
             self.shoot_sound.play()
-            # Calculate the wand tip offset (adjust values as needed)
-            # wand_offset = pygame.math.Vector2(40, -30) if not self.facing_left else pygame.math.Vector2(-40, -30)
-            # pos = pygame.math.Vector2(self.rect.center) + wand_offset
-            offset = self.magic.distance + 1  # 10 pixels beyond the wand's center
+            
+            # Consume energy
+            self.energy -= self.shoot_energy_cost
+            
+            offset = self.magic.distance + 1
             pos = self.magic.rect.center + self.magic.player_direction * offset
             MagicMissile(self.bullet_surf, pos, self.magic.player_direction, self.weapon_group, self.obstacle_sprites)
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
-            
+
+    def energy_recovery(self, dt):
+        """Regenerate energy over time"""
+        if self.energy < self.max_energy:
+            self.energy += self.energy_regen_rate * dt
+            # Cap energy at maximum
+            if self.energy > self.max_energy:
+                self.energy = self.max_energy
+
     def animate(self):
         animation = self.animations[self.status]
         self.frame_index += self.animation_speed
@@ -140,12 +155,13 @@ class Player(Entity):
         else:
             self.image.set_alpha(255)
     
-    def update(self):
+    def update(self, dt):
         self.input()
         self.cooldown()
         self.gun_timer()
         self.get_status()
         self.animate()
-        self.move(self.speed)
-        self.weapon_group.update()
+        self.move(self.speed * dt)
+        self.weapon_group.update(dt)
+        self.energy_recovery(dt)  # Add energy regeneration
 

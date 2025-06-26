@@ -78,17 +78,18 @@ class Level:
         
     
 
-    def run(self):
-        # Update
-        camera_offset = self.visible_sprites.get_offset(self.player)
-        self.visible_sprites.update()
-        self.visible_sprites.enemy_update(self.player) 
+    def run(self, dt):
+        # Update with dt
+        self.visible_sprites.update(dt)  # Pass dt to all sprites
+        self.visible_sprites.enemy_update(self.player, dt)  # Pass dt to enemy update
         self.player_attack_logic()
+        
         # Draw all normal sprites
         self.visible_sprites.custom_draw(self.player)
         self.ui.display(self.player)
-        # debug(self.player.status)
+        
         # Draw weapon manually with offset
+        camera_offset = self.visible_sprites.get_offset(self.player)
         for weapon in self.player.weapon_group:
             offset_pos = weapon.rect.topleft - camera_offset
             self.display_surface.blit(weapon.image, offset_pos)
@@ -131,7 +132,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         scaled_surface = pygame.transform.scale(self.display_surface, self.display_surface.get_size())
         self.display_surface.blit(scaled_surface, (0, 0))
 
-    def enemy_update(self,player):
+    def enemy_update(self, player, dt):
         enemy_sprites = [sprite for sprite in self.sprites() if hasattr(sprite,'sprite_type') and sprite.sprite_type == 'enemy']
         for enemy in enemy_sprites:
-            enemy.enemy_update(player)
+            enemy.enemy_update(player, dt)  # Pass dt to enemy update
