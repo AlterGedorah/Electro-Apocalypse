@@ -87,7 +87,7 @@ class Level:
         # Draw all normal sprites
         self.visible_sprites.custom_draw(self.player)
         self.ui.display(self.player)
-        debug(self.player.status)
+        # debug(self.player.status)
         # Draw weapon manually with offset
         for weapon in self.player.weapon_group:
             offset_pos = weapon.rect.topleft - camera_offset
