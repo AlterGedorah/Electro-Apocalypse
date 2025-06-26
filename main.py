@@ -61,6 +61,9 @@ class Game:
 
         pygame.display.flip()
 
+        self.paused = False
+
+
     def run_game(self): 
         while True:
             dt = self.clock.tick(60) / 1000
@@ -90,7 +93,33 @@ class Game:
             pygame.display.flip()   
             self.clock.tick(self.settings.fps)
 
+    def main_menu(self):
+        font = pygame.font.Font(None, 80)
+        title = font.render("Mage.", True, (255, 255, 255))
+        start_text = font.render("Press ENTER to Start", True, (200, 200, 200))
+        quit_text = font.render("Press Q to Quit", True, (200, 200, 200))
+
+        while True:
+            self.screen.fill((0, 0, 0))  # black background
+            self.screen.blit(title, (self.settings.screen_width // 2 - title.get_width() // 2, 200))
+            self.screen.blit(start_text, (self.settings.screen_width // 2 - start_text.get_width() // 2, 400))
+            self.screen.blit(quit_text, (self.settings.screen_width // 2 - quit_text.get_width() // 2, 500))
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+             if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return  # Start the game
+                if event.key == pygame.K_q:
+                    pygame.quit()
+                    sys.exit()
+    
+
 
 if __name__ == "__main__":
-    game = Game()   
+    game = Game()
+    game.main_menu()
     game.run_game()
