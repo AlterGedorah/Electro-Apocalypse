@@ -10,13 +10,13 @@ class Settings:
             'slime': {
                 'health': 100,
                 'exp': 50,
-                'speed': 150,  # Changed from 5 to 150 pixels per second
+                'speed': 20,  # Reduced from 50 to 20 pixels per second (much slower)
                 'attack_damage': 10,
                 'attack_type': 'bash',
                 'attack_sound': '../assets/sounds/slime.mp3',
                 'resistance': 0.1,
                 'attack_radius': 50,
-                'notice_radius': 500,
+                'notice_radius': 1000,
         }
         }
 

@@ -29,6 +29,10 @@ class Game:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Electro Apocalypse")
 
+        # Pre-load and scale background image once
+        self.background = pygame.image.load('assets/images/game_over.png').convert()
+        self.background = pygame.transform.scale(self.background, (self.settings.screen_width, self.settings.screen_height))
+
         # Level
         self.level = Level()
         self.game_over = False
@@ -45,9 +49,7 @@ class Game:
         pygame.mixer.music.play(-1)
 
     def show_game_over(self):
-        bg = pygame.image.load('assets/images/game_over.png').convert()
-        bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
-        self.screen.blit(bg, (0, 0))
+        self.screen.blit(self.background, (0, 0))
 
         overlay = pygame.Surface((self.settings.screen_width, self.settings.screen_height))
         overlay.set_alpha(128)
@@ -114,16 +116,11 @@ class Game:
                 continue
 
             # Game loop drawing
-            bg = pygame.image.load(r'assets\images\game_over.png').convert()
-            bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
-            self.screen.blit(bg, (0, 0))
+            self.screen.blit(self.background, (0, 0))
             self.level.run(dt)  # Pass dt here
             pygame.display.flip()
 
     def main_menu(self):
-        bg = pygame.image.load('assets/images/game_over.png').convert()
-        bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
-
         font_path = r'assets/fonts/Pixeltype.ttf'
         try:
             font = pygame.font.Font(font_path, 80)
@@ -135,7 +132,7 @@ class Game:
         quit_text = font.render("Press Q to Quit", True, (200, 200, 200))
 
         while True:
-            self.screen.blit(bg, (0, 0))
+            self.screen.blit(self.background, (0, 0))
             self.screen.blit(title, (self.settings.screen_width // 2 - title.get_width() // 2, 200))
             self.screen.blit(start_text, (self.settings.screen_width // 2 - start_text.get_width() // 2, 400))
             self.screen.blit(quit_text, (self.settings.screen_width // 2 - quit_text.get_width() // 2, 500))

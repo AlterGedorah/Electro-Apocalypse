@@ -36,15 +36,15 @@ class Player(Entity):
         self.status = 'idle'
 
         # Stats for player
-        self.stats = {'health': 100, 'energy': 60, 'attack': 10, 'speed': 200}
+        self.stats = {'health': 100, 'energy': 500, 'attack': 10, 'speed': 200}  # Increased energy from 200 to 500
         self.health = self.stats['health'] 
         self.energy = self.stats['energy']
         self.max_energy = self.stats['energy']  # Store max energy for regeneration
         self.speed = self.stats['speed']
         
         # Energy system
-        self.energy_regen_rate = 20  # Energy per second
-        self.shoot_energy_cost = 10  # Energy cost per shot
+        self.energy_regen_rate = 50  # Increased from 50 to 100 energy per second
+        self.shoot_energy_cost = 20  # Reduced from 2 to 1 energy cost per shot
         
         self.vulnerable = True
         self.hurt_time = None
