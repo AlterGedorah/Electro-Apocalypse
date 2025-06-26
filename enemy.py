@@ -9,7 +9,7 @@ class Enemy(Entity):
         self.death_sound.set_volume(0.9)
     
         self.walk_sound = pygame.mixer.Sound(r"sounds\slime.walk.mp3")  # Fix path
-        self.walk_sound.set_volume(0.5)
+        self.walk_sound.set_volume(0.3)
         # general setup
         super().__init__(groups)
         self.sprite_type = 'enemy'

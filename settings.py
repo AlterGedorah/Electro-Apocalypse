@@ -8,15 +8,15 @@ class Settings:
 
         self.monster_data = {
             'slime': {
-                'health': 100,
+                'health': 30,
                 'exp': 50,
-                'speed': 150,  # Changed from 5 to 150 pixels per second
+                'speed': 70,  # Changed from 5 to 150 pixels per second
                 'attack_damage': 10,
                 'attack_type': 'bash',
                 'attack_sound': '../assets/sounds/slime.mp3',
                 'resistance': 0.1,
                 'attack_radius': 50,
-                'notice_radius': 500,
+                'notice_radius': 200,
         }
         }
 
