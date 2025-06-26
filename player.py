@@ -6,7 +6,7 @@ from entity import Entity
 class Player(Entity):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups['main'])
-        self.image = pygame.image.load('assets\player\idle\idle_0.png').convert_alpha()
+        self.image = pygame.image.load(r'assets\player\idle\idle_0.png').convert_alpha()  # Fix path
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(0, -10)  # Adjust hitbox size if needed 
         # Graphics setup
