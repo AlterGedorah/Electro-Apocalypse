@@ -16,7 +16,7 @@ class Enemy(Entity):
         self.sprite_type = 'enemy'
         self.settings = Settings()
         self.direction = pygame.math.Vector2()
-
+        self.has_died = False
         # graphics setup        
         self.import_graphics(monster_name)
         self.status = 'idle'
@@ -122,6 +122,7 @@ class Enemy(Entity):
 
     def check_death(self):
         if self.health <= 0:
+            self.walk_sound.stop() 
             self.death_sound.play()
             self.kill()
     
