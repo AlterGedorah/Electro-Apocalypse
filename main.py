@@ -44,8 +44,12 @@ class Game:
         overlay.fill((0, 0, 0))
         self.screen.blit(overlay, (0, 0))
 
-        # Draw "GAME OVER"
-        font = pygame.font.Font(None, 100)
+        # Draw "GAME OVER" with a custom font
+        font_path = r'assets\fonts\Pixeltype.ttf'
+        try:
+            font = pygame.font.Font(font_path, 100)
+        except FileNotFoundError:
+            font = pygame.font.Font(None, 100)  # Fallback to default if not found
         text = font.render("GAME OVER", True, (255, 0, 0))
         self.screen.blit(
             text,
@@ -56,7 +60,7 @@ class Game:
         )
 
         # Draw instructions
-        small_font = pygame.font.Font(None, 50)
+        small_font = pygame.font.Font(font_path, 50)
         instr = small_font.render("Press R to Restart or Q to Quit", True, (255, 255, 255))
         self.screen.blit(
             instr,
@@ -106,7 +110,8 @@ class Game:
         bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
 
         # Use a custom font file (e.g., 'assets/fonts/YourFont.ttf')
-        font_path = 'assets\fonts\Pixeltype.ttf'
+        font_path = r'assets\fonts\Pixeltype.ttf'
+    
         try:
             font = pygame.font.Font(font_path, 80)
         except FileNotFoundError:

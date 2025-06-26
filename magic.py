@@ -6,7 +6,7 @@ class Magic(pygame.sprite.Sprite):
     def __init__(self, player, groups):
         super().__init__(groups)
         self.player = player
-        self.distance = 40
+        self.distance = 20
         self.direction = pygame.math.Vector2(0, 1)
 
         
@@ -40,20 +40,29 @@ class Magic(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=self.player.rect.center + self.player_direction * self.distance)
 
 class MagicMissile(pygame.sprite.Sprite):
-    def __init__(self, surf, pos, direction, groups):
+    def __init__(self, surf, pos, direction, groups, obstacle_sprites):
         super().__init__(groups)
         self.sprite_type = 'magic_missile'
         self.image = surf
         self.rect = self.image.get_rect(center=pos)
         self.spawn_time = pygame.time.get_ticks()
-        self.life_time = 1000
-
         self.pos = pygame.Vector2(pos)
         self.direction = direction.normalize()
         self.speed = 1000
+        self.obstacle_sprites = obstacle_sprites
+        self.life_time = 1000  # milliseconds, adjust as needed
 
     def update(self):
         self.pos += self.direction * self.speed / 60
         self.rect.center = self.pos
+
+        # Adjusted collision box (optional visual tweak)
+        hitbox = self.rect.inflate(-self.rect.width * 0.4, -self.rect.height * 0.4)
+
         if pygame.time.get_ticks() - self.spawn_time >= self.life_time:
             self.kill()
+
+        for obstacle in self.obstacle_sprites:
+            if hitbox.colliderect(obstacle.rect):
+                self.kill()
+                break
