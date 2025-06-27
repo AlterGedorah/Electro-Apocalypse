@@ -5,10 +5,10 @@ from support import *
 
 class Enemy(Entity):
     def __init__(self, monster_name, pos, groups, obstacle_sprites, damage_player):
-        self.death_sound = pygame.mixer.Sound(r"sounds\slime-impact-352473.mp3")  # Fix path
+        self.death_sound = pygame.mixer.Sound(r"sounds\slime-impact-352473.mp3") 
         self.death_sound.set_volume(0.9)
     
-        self.walk_sound = pygame.mixer.Sound(r"sounds\slime.walk.mp3")  # Fix path
+        self.walk_sound = pygame.mixer.Sound(r"sounds\slime.walk.mp3")  
         self.walk_sound.set_volume(0.3)
         # general setup
         super().__init__(groups)
@@ -142,19 +142,19 @@ class Enemy(Entity):
                 self.vulnerable = True
                 
 
-    def update(self, dt):  # Add dt parameter
+    def update(self, dt): 
         self.hit_reaction()
-        self.move(self.speed * dt)  # Multiply speed by dt
+        self.move(self.speed * dt)  
         self.animate()
         if self.direction.x != 0 or self.direction.y != 0:
             if not self.walk_sound.get_num_channels():
-                self.walk_sound.play(-1)  # loop the walking sound
+                self.walk_sound.play(-1)  
         else:
             self.walk_sound.stop()
         self.cooldowns()
         self.check_death()
 
-    def enemy_update(self, player, dt):  # Add dt parameter
+    def enemy_update(self, player, dt):  
         self.get_status(player)
         self.actions(player)
-        self.update(dt)  # Pass dt to update
+        self.update(dt)  

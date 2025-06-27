@@ -28,7 +28,6 @@ def import_cut_graphics(path, tile_size):
             y = row * tile_size
             frame = surface.subsurface(pygame.Rect(x, y, tile_size, tile_size)).copy()
             
-            # Trim transparent pixels from the frame
             trimmed_rect = frame.get_bounding_rect()
             trimmed_frame = frame.subsurface(trimmed_rect).copy()
 

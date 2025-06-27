@@ -13,7 +13,7 @@ class Magic(pygame.sprite.Sprite):
         self.screen = pygame.display.get_surface()
         #sprite setup
         self.wand_surf = pygame.image.load(r'assets\weapons\staff.png').convert_alpha()
-        self.wand_surf = pygame.transform.smoothscale(self.wand_surf, (18, 42))  # Adjust size as needed
+        self.wand_surf = pygame.transform.smoothscale(self.wand_surf, (18, 42)) 
         self.image = self.wand_surf
         self.rect = self.image.get_rect(center=player.rect.center + self.direction * self.distance)
         
@@ -27,11 +27,11 @@ class Magic(pygame.sprite.Sprite):
             self.player_direction = pygame.Vector2(0, -1)
 
     def rotate_wand(self):
-        angle = degrees(atan2(-self.player_direction.y, self.player_direction.x)) - 90  # Invert y-axis for correct rotation
+        angle = degrees(atan2(-self.player_direction.y, self.player_direction.x)) - 90  
         self.image = pygame.transform.rotozoom(self.wand_surf, angle, 1)
 
 
-    def update(self, dt):  # Add dt parameter
+    def update(self, dt):  
         self.get_direction()
         self.rotate_wand()
         # Reposition the wand based on direction toward mouse
@@ -48,12 +48,12 @@ class MagicMissile(pygame.sprite.Sprite):
         self.spawn_time = pygame.time.get_ticks()
         self.pos = pygame.Vector2(pos)
         self.direction = direction.normalize()
-        self.speed = 800  # Pixels per second
+        self.speed = 800  
         self.obstacle_sprites = obstacle_sprites
-        self.life_time = 2000  # 2 seconds
+        self.life_time = 2000  
 
-    def update(self, dt):  # Add dt parameter
-        self.pos += self.direction * self.speed * dt  # Use dt for movement
+    def update(self, dt): 
+        self.pos += self.direction * self.speed * dt  
         self.rect.center = self.pos
 
         # Check for lifetime expiration

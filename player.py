@@ -6,13 +6,13 @@ from entity import Entity
 class Player(Entity):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups['main'])
-        self.image = pygame.image.load(r'assets\player\idle\idle_0.png').convert_alpha()  # Fix path
+        self.image = pygame.image.load(r'assets\player\idle\idle_0.png').convert_alpha() 
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(0, -10)  # Adjust hitbox size if needed 
+        self.hitbox = self.rect.inflate(0, -10)  
         # Graphics setup
         self.import_player_assets()
 
-        self.weapon_group = groups['attack']  # So it gets added to the same group `Level` uses
+        self.weapon_group = groups['attack']  
         self.magic = Magic(self, [groups['main']])
 
         # Movement
@@ -21,7 +21,7 @@ class Player(Entity):
         self.obstacle_sprites = obstacle_sprites
 
         # Combat
-        self.hurt = False  # still included if needed
+        self.hurt = False  
 
         #shoot_sound
         self.shoot_sound = pygame.mixer.Sound('sounds/shoot.wav')
@@ -31,7 +31,7 @@ class Player(Entity):
         # gun timer
         self.can_shoot = True
         self.shoot_time = 0
-        self.shoot_cooldown = 100  # milliseconds
+        self.shoot_cooldown = 100  
         # Status
         self.status = 'idle'
 
@@ -39,7 +39,7 @@ class Player(Entity):
         self.stats = {'health': 100, 'energy': 100, 'attack': 10, 'speed': 200}
         self.health = self.stats['health'] 
         self.energy = self.stats['energy']
-        self.max_energy = self.stats['energy']  # Store max energy for regeneration
+        self.max_energy = self.stats['energy'] 
         self.speed = self.stats['speed']
         
         # Energy system
@@ -71,8 +71,7 @@ class Player(Entity):
 
     def load_images(self):
         bullet = pygame.image.load(r'assets\weapons\energy_ball.png').convert_alpha()
-        self.bullet_surf = pygame.transform.smoothscale(bullet, (64, 64))  # Adjust size as needed
-
+        self.bullet_surf = pygame.transform.smoothscale(bullet, (64, 64)) 
 
     def gun_timer(self):
         if not self.can_shoot:
@@ -107,7 +106,7 @@ class Player(Entity):
             self.direction.y = 1
             self.status = 'right'
 
-                # ✅ Play walking sound only if moving
+               
         if self.direction.x != 0 or self.direction.y != 0:
             if not self.walk_sound.get_num_channels():
                 self.walk_sound.play(-1)
@@ -163,5 +162,5 @@ class Player(Entity):
         self.animate()
         self.move(self.speed * dt)
         self.weapon_group.update(dt)
-        self.energy_recovery(dt)  # Add energy regeneration
+        self.energy_recovery(dt)  
 

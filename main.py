@@ -116,14 +116,14 @@ class Game:
             if self.game_over:
                 self.show_game_over()
                 continue
-
-            # Game loop drawing (optimized background loading)
+                
+            # Game loop drawing
             if not hasattr(self, '_cached_bg') or self._cached_bg is None:
                 bg = pygame.image.load('assets/images/game_over.png').convert()
                 bg = pygame.transform.scale(bg, (self.settings.screen_width, self.settings.screen_height))
                 self._cached_bg = bg
             self.screen.blit(self._cached_bg, (0, 0))
-            self.level.run(dt)  # Pass dt here
+            self.level.run(dt)
             pygame.display.flip()
 
     def main_menu(self):
